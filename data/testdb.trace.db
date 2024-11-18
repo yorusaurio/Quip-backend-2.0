@@ -1,0 +1,20 @@
+2024-11-15 12:58:33.147310-05:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Error de Sintaxis en sentencia SQL "SELECT c.id, COUNT(*) AS count\000d\000aFROM conversations c\000d\000aJOIN conversation_participants p1 ON c.id = p1.conversation_id\000d\000aJOIN conversation_participants p2 ON c.id = p2.conversation_id\000d\000aWHERE ((p1.user_id = [*]:user1Id AND p2.user_id = :user2Id) OR (p1.user_id = :user2Id AND p2.user_id = :user1Id))\000d\000aAND c.is_group = FALSE\000d\000aGROUP BY c.id\000d\000aHAVING COUNT(*) > 1"; se esperaba "ALL (, ANY (, SOME ("
+Syntax error in SQL statement "SELECT c.id, COUNT(*) AS count\000d\000aFROM conversations c\000d\000aJOIN conversation_participants p1 ON c.id = p1.conversation_id\000d\000aJOIN conversation_participants p2 ON c.id = p2.conversation_id\000d\000aWHERE ((p1.user_id = [*]:user1Id AND p2.user_id = :user2Id) OR (p1.user_id = :user2Id AND p2.user_id = :user1Id))\000d\000aAND c.is_group = FALSE\000d\000aGROUP BY c.id\000d\000aHAVING COUNT(*) > 1"; expected "ALL (, ANY (, SOME ("; SQL statement:
+SELECT c.id, COUNT(*) AS count
+FROM conversations c
+JOIN conversation_participants p1 ON c.id = p1.conversation_id
+JOIN conversation_participants p2 ON c.id = p2.conversation_id
+WHERE ((p1.user_id = :user1Id AND p2.user_id = :user2Id) OR (p1.user_id = :user2Id AND p2.user_id = :user1Id))
+AND c.is_group = FALSE
+GROUP BY c.id
+HAVING COUNT(*) > 1 [42001-224]
+2024-11-15 13:26:47.091717-05:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Tabla "CONVERSATION" no encontrada
+Table "CONVERSATION" not found; SQL statement:
+SELECT c.id, COUNT(*) AS duplicate_count
+FROM conversation c
+JOIN conversation_participant cp ON c.id = cp.conversation_id
+WHERE c.is_group = false
+GROUP BY c.id
+HAVING duplicate_count > 2 [42102-224]
